@@ -39,16 +39,16 @@ def minimal_example3D(width=2e-2, Nadapt=10, eta = 0.04):
           or mesh.coordinates()[:,1].min() < DOLFIN_EPS or mesh.coordinates()[:,1].max()-x[1] < DOLFIN_EPS \
           or mesh.coordinates()[:,2].min() < DOLFIN_EPS or mesh.coordinates()[:,2].max()-x[2] < DOLFIN_EPS
     # PERFORM TEN ADAPTATION ITERATIONS
-    fid  = File("out.pvd")
+    #fid  = File("out.pvd")
     for iii in range(Nadapt):
      V = FunctionSpace(mesh, "CG" ,2); dis = TrialFunction(V); dus = TestFunction(V); u = Function(V)
      a = inner(grad(dis), grad(dus))*dx
      L = Expression(ddtestsol)*dus*dx
      bc = DirichletBC(V, Expression(testsol), boundary)
      solve(a == L, u, bc)
-     fid << u
+     #fid << u
      startTime = time()
-     H = metric_pnorm(u, eta, max_edge_length=2., max_edge_ratio=50, CG1out=True)
+     H = metric_pnorm(u, eta, max_edge_length=1., max_edge_ratio=None, CG1out=True)
      #H = logproject(H)
      if iii != Nadapt-1:
       mesh = adapt(H) 
